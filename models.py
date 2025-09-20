@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from sqlalchemy import String, Text, Float, BigInteger, ForeignKey
+from sqlalchemy import String, Text, Float, BigInteger, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, DeclarativeBase, mapped_column, relationship
 from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
 
@@ -30,6 +30,8 @@ DEFAULT_VALUES = {
     "total_cost": 0.0,
     "total_order_cost": 0.0,
     "order_components": "Нет товаров",
+    "product_name": "Имя товара не задано",
+    "quantity": 0
 }
 
 
@@ -90,6 +92,7 @@ class ProductVariant(Base):
 
     volume: Mapped[str] = mapped_column(Text, nullable=False)
     price: Mapped[float] = mapped_column(Float, nullable=False)
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=DEFAULT_VALUES["quantity"])
 
     product: Mapped["Product"] = relationship(back_populates="variants")
 
