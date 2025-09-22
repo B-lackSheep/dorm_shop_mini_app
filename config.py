@@ -1,10 +1,11 @@
-import telebot
+from aiogram import Bot, Dispatcher
 import os
 
 
-bot = telebot.TeleBot(os.getenv("TOKEN"))
+bot = Bot(token=os.getenv("TOKEN"), parse_mode="HTML")
+dp = Dispatcher()
 
-ADMINS = ["@B_lackSheep", "@istanoki"]
+ADMINS = ["B_lackSheep", "istanoki"]
 admin_drafts = {
     ADMINS[0]: {},
     ADMINS[1]: {}
