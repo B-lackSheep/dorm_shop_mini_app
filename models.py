@@ -31,7 +31,6 @@ DEFAULT_VALUES = {
     "first_name": "Нет данных об имени",
     "room": "Нет данных о комнате",
     "total_cost": 0.0,
-    "total_amount": 0.0,
     "order_components": "Нет товаров",
     "product_name": "Имя товара не задано",
     "quantity": 0,
@@ -59,7 +58,7 @@ class Order(Base):
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
-    total_amount: Mapped[float] = mapped_column(Numeric(10, 2), default=DEFAULT_VALUES["total_order_cost"])
+    total_cost: Mapped[float] = mapped_column(Numeric(10, 2), default=DEFAULT_VALUES["total_cost"])
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(pytz.timezone('Europe/Minsk'))
@@ -84,7 +83,7 @@ class OrderItem(Base):
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=DEFAULT_VALUES['quantity'])
 
-    order: Mapped[Order] = relationship(back_populates="items")
+    order: Mapped["Order"] = relationship(back_populates="items")
 
 
 class Category(Base):

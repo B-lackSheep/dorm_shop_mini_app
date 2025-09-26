@@ -6,7 +6,7 @@ from models import User
 async def add_user(tg_id, username, first_name):
     async with async_session() as session:
         async with session.begin():
-            user = await find_user(tg_id)
+            user = await find_user(tg_id, session)
 
             if user:
                 return {"status": "error", "message": "The user has already been added"}

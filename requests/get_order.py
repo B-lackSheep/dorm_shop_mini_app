@@ -1,10 +1,11 @@
 from models import Order
-
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 async def get_order(order_id, session):
-        order = await session.get(Order, order_id)
-
-        if not order:
-            return None
-
-        return order
+    result = await session.execute(
+        select(Order)
+        .options(selectinload(Order.items))
+        .where(Order.id == order_id)
+    )
+    return result.scalar_one_or_none()

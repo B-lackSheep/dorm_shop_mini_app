@@ -1,12 +1,11 @@
 from models import User
-from models import async_session
+from sqlalchemy import select
 
 
-async def find_user(user_id):
-    async with async_session() as session:
-        user = await session.get(User, user_id)
+async def find_user(tg_id, session):
+    result = await session.execute(
+        select(User)
+        .where(User.tg_id == tg_id)
+    )
 
-        if not user:
-            return None
-
-        return user
+    return result.scalar_one_or_none()

@@ -1,15 +1,15 @@
-from sqlalchemy import delete
 from models import async_session
-from models import Order
+from requests.get_order import get_order
 
 
-async def delete_order(tg_id):
+async def delete_order(order_id):
     async with async_session() as session:
         async with session.begin():
-            stmt = delete(Order).where(Order.tg_id == tg_id)
-            result = await session.execute(stmt)
+            order = await get_order(order_id, session)
 
-            if result.rowcount == 0:
-                return {"status": "error", "message": "Orders not found"}
+            if not order:
+                return {"status": "error", "message": "Order not found"}
 
-        return {"status": "success", "message": f"Deleted {result.rowcount} orders"}
+            await session.delete(order)
+
+        return {"status": "success", "message": f"Deleted order {order_id}"}
