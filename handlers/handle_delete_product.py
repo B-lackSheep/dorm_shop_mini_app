@@ -38,7 +38,7 @@ async def process_variant_id(message: types.Message, state: FSMContext):
 
         variant = await get_variant(variant_id, session)
         if not variant:
-            await message.answer("❌ Вариант не найден. Попробуйте снова.")
+            await message.answer("Вариант не найден. Попробуйте снова.")
             return
 
         await state.update_data(variant_id=variant_id)
@@ -63,8 +63,8 @@ async def confirm_delete(message: types.Message, state: FSMContext):
 
     if message.text.lower() == "да":
         result = await delete_product(variant_id)
-        await message.answer(f"✅ {result['message']}")
+        await message.answer(f"{result['message']}")
     else:
-        await message.answer("❌ Удаление отменено.")
+        await message.answer("Удаление отменено.")
 
     await state.clear()

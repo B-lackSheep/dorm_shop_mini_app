@@ -4,16 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d238af06-0a9d-425c-b426-e4ec986995da" name="Changes" comment="added models, changed requests, added handlers">
-      <change afterPath="$PROJECT_DIR$/requests/add_order.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/delete_orders.py" afterDir="false" />
+    <list default="true" id="d238af06-0a9d-425c-b426-e4ec986995da" name="Changes" comment="changed requests, added new">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/add_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/add_user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/delete_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/delete_order.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/find_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/find_user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/get_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/get_order.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/get_orders.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/get_orders.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +118,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758660756581</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="changed requests, added new">
+      <option name="closed" value="true" />
+      <created>1758879755223</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1758879755223</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -135,6 +135,7 @@
     <MESSAGE value="probably ended models + part of requests" />
     <MESSAGE value="probably ended requests + part of commands" />
     <MESSAGE value="added models, changed requests, added handlers" />
-    <option name="LAST_COMMIT_MESSAGE" value="added models, changed requests, added handlers" />
+    <MESSAGE value="changed requests, added new" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed requests, added new" />
   </component>
 </project>

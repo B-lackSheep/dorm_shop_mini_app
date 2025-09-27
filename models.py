@@ -52,40 +52,6 @@ class User(Base):
     sales: Mapped[list["Sale"]] = relationship(back_populates="user")
 
 
-class Order(Base):
-    __tablename__ = "orders"
-
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-
-    total_cost: Mapped[float] = mapped_column(Numeric(10, 2), default=DEFAULT_VALUES["total_cost"])
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        default=lambda: datetime.now(pytz.timezone('Europe/Minsk'))
-    )
-    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-
-    user: Mapped[User] = relationship(back_populates="orders")
-    items: Mapped[list["OrderItem"]] = relationship(back_populates="order", cascade="all, delete-orphan")
-
-
-class OrderItem(Base):
-    __tablename__ = "order_items"
-
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    order_id: Mapped[int] = mapped_column(ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
-    product_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['product_name'])
-    volume: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['volume'])
-    price: Mapped[float] = mapped_column(
-        Numeric(10, 2),
-        nullable=False,
-        default=DEFAULT_VALUES['product_price']
-    )
-    quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=DEFAULT_VALUES['quantity'])
-
-    order: Mapped["Order"] = relationship(back_populates="items")
-
-
 class Category(Base):
     __tablename__ = "categories"
 
@@ -120,6 +86,40 @@ class ProductVariant(Base):
     quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=DEFAULT_VALUES["quantity"])
 
     product: Mapped["Product"] = relationship(back_populates="variants")
+
+
+class Order(Base):
+    __tablename__ = "orders"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+
+    total_cost: Mapped[float] = mapped_column(Numeric(10, 2), default=DEFAULT_VALUES["total_cost"])
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(pytz.timezone('Europe/Minsk'))
+    )
+    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    user: Mapped[User] = relationship(back_populates="orders")
+    items: Mapped[list["OrderItem"]] = relationship(back_populates="order", cascade="all, delete-orphan")
+
+
+class OrderItem(Base):
+    __tablename__ = "order_items"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    order_id: Mapped[int] = mapped_column(ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
+    product_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['product_name'])
+    volume: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['volume'])
+    price: Mapped[float] = mapped_column(
+        Numeric(10, 2),
+        nullable=False,
+        default=DEFAULT_VALUES['product_price']
+    )
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=DEFAULT_VALUES['quantity'])
+
+    order: Mapped["Order"] = relationship(back_populates="items")
 
 
 class Sale(Base):
