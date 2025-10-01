@@ -21,6 +21,7 @@ class DeleteProduct(StatesGroup):
 async def start_delete_product(message: types.Message, state: FSMContext):
     if not is_admin(message):
         await message.answer("У вас нет прав для этой команды.")
+        await state.clear()
         return
 
     await message.answer("Введите ID варианта товара, который хотите удалить:")
@@ -28,17 +29,19 @@ async def start_delete_product(message: types.Message, state: FSMContext):
 
 
 @router.message(DeleteProduct.waiting_for_variant_id)
-async def process_variant_id(message: types.Message, state: FSMContext):
+async def process_delete_product(message: types.Message, state: FSMContext):
     async with async_session() as session:
         try:
             variant_id = int(message.text)
         except ValueError:
             await message.answer("Введите корректный числовой ID.")
+            await state.clear()
             return
 
         variant = await get_variant(variant_id, session)
         if not variant:
-            await message.answer("Вариант не найден. Попробуйте снова.")
+            await message.answer("Вариант не найден. Введите команду заново.")
+            await state.clear()
             return
 
         await state.update_data(variant_id=variant_id)
@@ -57,11 +60,11 @@ async def process_variant_id(message: types.Message, state: FSMContext):
 
 
 @router.message(DeleteProduct.waiting_for_confirmation)
-async def confirm_delete(message: types.Message, state: FSMContext):
-    data = await state.get_data()
-    variant_id = data.get("variant_id")
-
+async def confirm_delete_product(message: types.Message, state: FSMContext):
     if message.text.lower() == "да":
+        data = await state.get_data()
+        variant_id = data.get("variant_id")
+
         result = await delete_product(variant_id)
         await message.answer(f"{result['message']}")
     else:

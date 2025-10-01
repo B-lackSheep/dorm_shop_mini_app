@@ -5,6 +5,7 @@ from aiogram.filters import Command
 
 from filters.is_admin import is_admin
 from models import async_session
+from requests.confirm_order import confirm_order
 from requests.delete_order import delete_order
 from requests.get_order import get_order
 
@@ -12,24 +13,24 @@ from requests.get_order import get_order
 router = Router()
 
 
-class DeleteOrder(StatesGroup):
+class ConfirmOrder(StatesGroup):
     waiting_for_order_id = State()
     waiting_for_confirmation = State()
 
 
-@router.message(Command("deleteOrder"))
-async def start_delete_order(message: types.Message, state: FSMContext):
+@router.message(Command("confirmOrder"))
+async def start_confirm_order(message: types.Message, state: FSMContext):
     if not is_admin(message):
         await message.answer("У вас нет прав для этой команды.")
         await state.clear()
         return
 
-    await message.answer("Введите ID заказа, который хотите отменить:")
-    await state.set_state(DeleteOrder.waiting_for_order_id)
+    await message.answer("Введите ID заказа, оплату которого хотите подтвердить:")
+    await state.set_state(ConfirmOrder.waiting_for_order_id)
 
 
-@router.message(DeleteOrder.waiting_for_order_id)
-async def process_delete_order(message: types.Message, state: FSMContext):
+@router.message(ConfirmOrder.waiting_for_order_id)
+async def process_confirm_order(message: types.Message, state: FSMContext):
     async with async_session() as session:
         try:
             order_id = int(message.text)
@@ -47,13 +48,11 @@ async def process_delete_order(message: types.Message, state: FSMContext):
         await state.update_data(order_id=order_id)
 
         text = (
-            "Вы уверены, что хотите удалить заказ?\n\n"
+            "Вы уверены, что хотите подтвердить оплату заказа?\n\n"
             f"Order ID: {order.id}\n"
             f"Total cost: {order.total_cost} BYN\n"
             f"Order created at: {order.created_at}\n\n"
         )
-        if order.notes:
-            text += f"Notes: {order.notes}\n\n"
 
         for item in order.items:
             text += (
@@ -66,18 +65,19 @@ async def process_delete_order(message: types.Message, state: FSMContext):
         text += "Введите 'Да' для подтверждения или 'Нет' для отмены."
 
         await message.answer(text)
-        await state.set_state(DeleteOrder.waiting_for_confirmation)
+        await state.set_state(ConfirmOrder.waiting_for_confirmation)
 
 
-@router.message(DeleteOrder.waiting_for_confirmation)
-async def confirm_delete_order(message: types.Message, state: FSMContext):
+@router.message(ConfirmOrder.waiting_for_confirmation)
+async def confirm_confirm_order(message: types.Message, state: FSMContext):
     if message.text.lower() == "да":
         data = await state.get_data()
         order_id = data.get("order_id")
 
-        result = await delete_order(order_id)
-        await message.answer(f"{result['message']}")
+        sending_result = await confirm_order(order_id)
+        deletion_result = await delete_order(order_id)
+        await message.answer(f"{sending_result['message']}, {deletion_result['message']}")
     else:
-        await message.answer("Удаление отменено.")
+        await message.answer("Подтверждение отменено.")
 
     await state.clear()
