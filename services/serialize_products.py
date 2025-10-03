@@ -1,9 +1,9 @@
-from requests.get_products import get_products
+from requests.get_products_by_category import get_products_by_category
 from schemas import ProductSchema
 
 
 async def serialize_product(category_id):
-    products = await get_products(category_id)
+    products = await get_products_by_category(category_id)
     if not products:
         return None
 

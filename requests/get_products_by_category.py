@@ -3,7 +3,7 @@ from sqlalchemy.orm import selectinload
 from models import async_session, Product
 
 
-async def get_products(category_id):
+async def get_products_by_category(category_id):
     async with async_session() as session:
         products = await session.scalars(
             select(Product)
