@@ -4,10 +4,10 @@ from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command
 
 from filters.is_admin import is_admin
-from models import async_session
-from requests.confirm_order import confirm_order
-from requests.delete_order import delete_order
-from requests.get_order import get_order
+from models.db_models import async_session
+from requests.order.confirm_order import confirm_order
+from requests.order.delete_order import delete_order
+from requests.order.get_order import get_order
 
 
 router = Router()

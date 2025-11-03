@@ -1,9 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from models import Product
+from models.db_models import Product
 
 
-async def get_variants(product_name, session):
+async def get_products(product_name, session):
     result = await session.execute(
         select(Product)
         .options(

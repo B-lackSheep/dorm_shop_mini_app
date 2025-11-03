@@ -1,6 +1,5 @@
-from models import async_session
-from requests.find_user import find_user
-from models import User
+from models.db_models import async_session, User
+from requests.user.find_user import find_user
 
 
 async def add_user(tg_id, username, first_name):

@@ -1,6 +1,6 @@
 from sqlalchemy import select, func
-from models import async_session, Product, ProductVariant
-from requests.get_variant import get_variant
+from models.db_models import async_session, Product, ProductVariant
+from requests.product.get_variant import get_variant
 
 
 async def delete_product(variant_id):

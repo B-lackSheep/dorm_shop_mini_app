@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 from filters.is_admin import is_admin
-from requests.get_orders import get_orders
+from requests.order.get_orders import get_orders
 from models import async_session
 
 

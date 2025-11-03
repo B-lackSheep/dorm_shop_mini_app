@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_
 from datetime import datetime
 import pytz
 from typing import Optional
+from config import DEFAULT_VALUES
 
 
 load_dotenv()
@@ -26,19 +27,6 @@ class Base(AsyncAttrs, DeclarativeBase):
     pass
 
 
-DEFAULT_VALUES = {
-    "username": "Не установлен username",
-    "first_name": "Нет данных об имени",
-    "room": "Нет данных о комнате",
-    "total_cost": 0.0,
-    "order_components": "Нет товаров",
-    "product_name": "Имя товара не задано",
-    "quantity": 0,
-    "volume": "Нет данных о массе/объеме",
-    "product_price": 0.0
-}
-
-
 class User(Base):
     __tablename__ = "users"
 
@@ -48,17 +36,16 @@ class User(Base):
     first_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES["first_name"])
     room: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES["room"])
 
-    orders: Mapped[list["Order"]] = relationship(back_populates="user", cascade="all, delete-orphan")
-    sales: Mapped[list["Sale"]] = relationship(back_populates="user")
-
 
 class Category(Base):
     __tablename__ = "categories"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    category_name: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
+    category_name: Mapped[str] = mapped_column(Text, nullable=False, default="category_name")
 
-    products: Mapped[list["Product"]] = relationship(back_populates="category")
+    products: Mapped[list["Product"]] = relationship(
+        back_populates="category", cascade="all, delete-orphan"
+    )
 
 
 class Product(Base):
@@ -81,8 +68,8 @@ class ProductVariant(Base):
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     product_id: Mapped[int] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"), nullable=False)
 
-    volume: Mapped[str] = mapped_column(Text, nullable=False)
-    price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
+    volume: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES["volume"])
+    price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False, default=DEFAULT_VALUES["price"])
     quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=DEFAULT_VALUES["quantity"])
 
     product: Mapped["Product"] = relationship(back_populates="variants")
@@ -92,7 +79,7 @@ class Order(Base):
     __tablename__ = "orders"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
 
     total_cost: Mapped[float] = mapped_column(Numeric(10, 2), default=DEFAULT_VALUES["total_cost"])
     created_at: Mapped[datetime] = mapped_column(
@@ -101,7 +88,10 @@ class Order(Base):
     )
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
-    user: Mapped[User] = relationship(back_populates="orders")
+    username: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES["username"])
+    user_room: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['room'])
+    user_first_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['first_name'])
+
     items: Mapped[list["OrderItem"]] = relationship(back_populates="order", cascade="all, delete-orphan")
 
 
@@ -110,12 +100,13 @@ class OrderItem(Base):
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     order_id: Mapped[int] = mapped_column(ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
+    category_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['category_name'])
     product_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['product_name'])
     volume: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['volume'])
     price: Mapped[float] = mapped_column(
         Numeric(10, 2),
         nullable=False,
-        default=DEFAULT_VALUES['product_price']
+        default=DEFAULT_VALUES['price']
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=DEFAULT_VALUES['quantity'])
 
@@ -126,7 +117,8 @@ class Sale(Base):
     __tablename__ = "sales"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    user_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+
     total_cost: Mapped[float] = mapped_column(
         Numeric(10, 2),
         nullable=False,
@@ -136,10 +128,11 @@ class Sale(Base):
         DateTime(timezone=True),
         default=lambda: datetime.now(pytz.timezone('Europe/Minsk'))
     )
-    user_room: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['room'])
-    user_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['first_name'])
 
-    user: Mapped[User] = relationship(back_populates="sales")
+    username: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['username'])
+    user_room: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['room'])
+    user_first_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['first_name'])
+
     items: Mapped[list["SaleItem"]] = relationship(back_populates="sale", cascade="all, delete-orphan")
 
 
@@ -148,12 +141,13 @@ class SaleItem(Base):
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     sale_id: Mapped[int] = mapped_column(ForeignKey("sales.id", ondelete="CASCADE"))
-    product_name: Mapped[str] = mapped_column(Text, nullable=False)
+    category_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['category_name'])
+    product_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES["product_name"])
     volume: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['volume'])
     price: Mapped[float] = mapped_column(
         Numeric(10, 2),
         nullable=False,
-        default=DEFAULT_VALUES['product_price']
+        default=DEFAULT_VALUES['price']
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=DEFAULT_VALUES['quantity'])
 

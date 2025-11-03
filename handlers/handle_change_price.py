@@ -5,8 +5,8 @@ from aiogram.filters import Command
 
 from filters.is_admin import is_admin
 from models import async_session
-from requests.change_price import change_price
-from requests.get_variant import get_variant
+from requests.product.update.change_price import change_price
+from requests.product.get_variant import get_variant
 
 
 router = Router()

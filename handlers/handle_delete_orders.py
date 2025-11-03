@@ -5,10 +5,8 @@ from aiogram.filters import Command
 
 from filters.is_admin import is_admin
 from models import async_session
-from requests.delete_order import delete_order
-from requests.delete_orders import delete_orders
-from requests.get_order import get_order
-from requests.get_orders import get_orders
+from requests.order.delete_orders import delete_orders
+from requests.order.get_orders import get_orders
 
 router = Router()
 

@@ -1,5 +1,5 @@
 from aiogram import Router, types
-from requests.add_user import add_user
+from requests.user.add_user import add_user
 
 
 router = Router()

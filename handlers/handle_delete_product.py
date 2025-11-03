@@ -5,8 +5,8 @@ from aiogram.filters import Command
 
 from filters.is_admin import is_admin
 from models import async_session
-from requests.delete_product import delete_product
-from requests.get_variant import get_variant
+from requests.product.delete_product import delete_product
+from requests.product.get_variant import get_variant
 
 
 router = Router()

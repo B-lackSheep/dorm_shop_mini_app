@@ -1,4 +1,4 @@
-from models import User
+from models.db_models import User
 from sqlalchemy import select
 
 

@@ -1,5 +1,5 @@
-from models import async_session
-from requests.get_order import get_order
+from models.db_models import async_session
+from requests.order.get_order import get_order
 
 
 async def delete_order(order_id):

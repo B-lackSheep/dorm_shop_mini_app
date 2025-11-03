@@ -1,6 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from models import ProductVariant
+from models.db_models import ProductVariant
 
 
 async def get_variant(variant_id, session):
@@ -9,6 +9,5 @@ async def get_variant(variant_id, session):
         .options(selectinload(ProductVariant.product))
         .where(ProductVariant.id == variant_id)
     )
-    variant = result.scalar_one_or_none()
 
-    return variant
+    return result.scalar_one_or_none()

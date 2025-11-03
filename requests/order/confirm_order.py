@@ -1,5 +1,5 @@
-from models import async_session, Sale, SaleItem
-from requests.get_order import get_order
+from models.db_models import async_session, Sale, SaleItem
+from requests.order.get_order import get_order
 
 
 async def confirm_order(order_id):
@@ -14,8 +14,9 @@ async def confirm_order(order_id):
                 user_id=order.user_id,
                 total_cost=order.total_cost,
                 created_at=order.created_at,
-                user_room=order.user.room,
-                user_name=order.user.first_name
+                username=order.username,
+                user_room=order.user_room,
+                user_first_name=order.user_first_name
             )
 
             session.add(sale)
@@ -24,6 +25,7 @@ async def confirm_order(order_id):
             for order_item in order.items:
                 sale_item = SaleItem(
                     sale_id=sale.id,
+                    category_name=order_item.category_name,
                     product_name=order_item.product_name,
                     volume=order_item.volume,
                     price=order_item.price,
@@ -33,4 +35,3 @@ async def confirm_order(order_id):
                 session.add(sale_item)
 
             return {"status":"success", "message":"Order sent to analytics"}
-

@@ -3,7 +3,8 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 
 from filters.is_admin import is_admin
-from requests.add_product import add_product
+from models.db_models import async_session
+from requests.product.add_product import add_product
 
 
 router = Router()
@@ -37,7 +38,7 @@ async def process_category(message: types.Message, state: FSMContext):
 @router.message(AddProduct.waiting_for_name)
 async def process_name(message: types.Message, state: FSMContext):
     await state.update_data(product_name=message.text)
-    await message.answer("Введите объём (например, '0.5 л'):")
+    await message.answer("Введите объем/массу (например, '0.5 л'):")
     await state.set_state(AddProduct.waiting_for_volume)
 
 
@@ -61,7 +62,6 @@ async def process_price(message: types.Message, state: FSMContext):
     await state.set_state(AddProduct.waiting_for_quantity)
 
 
-
 @router.message(AddProduct.waiting_for_quantity)
 async def process_quantity(message: types.Message, state: FSMContext):
     try:
@@ -70,18 +70,17 @@ async def process_quantity(message: types.Message, state: FSMContext):
         await message.answer("Введите целое число (например, 10)")
         return
 
-    await state.update_data(quantity=quantity)
+    async with async_session as session:
+        data = await state.get_data()
+        await add_product(data, session)
 
-    data = await state.get_data()
-    await add_product(data)
+        await message.answer(
+            f"Товар успешно добавлен:\n\n"
+            f"Категория: {data['category_name']}\n"
+            f"Название: {data['product_name']}\n"
+            f"Объём: {data['volume']}\n"
+            f"Цена: {data['price']}\n"
+            f"Количество: {quantity}"
+        )
 
-    await message.answer(
-        f"✅ Товар успешно добавлен:\n\n"
-        f"Категория: {data['category_name']}\n"
-        f"Название: {data['product_name']}\n"
-        f"Объём: {data['volume']}\n"
-        f"Цена: {data['price']}\n"
-        f"Количество: {data['quantity']}"
-    )
-
-    await state.clear()
+        await state.clear()
