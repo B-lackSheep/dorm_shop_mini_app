@@ -4,27 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d238af06-0a9d-425c-b426-e4ec986995da" name="Changes" comment="close to end handlers and endpoints">
-      <change afterPath="$PROJECT_DIR$/models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/api_models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/category/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/category/add_category.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/category/delete_category.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/category/get_category.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/category/update/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/category/update/change_name.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/order/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/order/add_order.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/product/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/product/get_products_by_category.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/product/update/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/product/update/change_category.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/product/update/change_name.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requests/user/__init__.py" afterDir="false" />
+    <list default="true" id="d238af06-0a9d-425c-b426-e4ec986995da" name="Changes" comment="ended back">
+      <change afterPath="$PROJECT_DIR$/endpoints/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/endpoints/category.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/endpoints/order.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/print_order.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/endpoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/endpoints.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/endpoints.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/filters/is_admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/filters/is_admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlers/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers/handle_add_product.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/handle_add_product.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers/handle_change_price.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/handle_change_price.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers/handle_confirm_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/handle_confirm_order.py" afterDir="false" />
@@ -34,27 +23,16 @@
       <change beforePath="$PROJECT_DIR$/handlers/handle_delete_product.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/handle_delete_product.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers/handle_find_orders.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/handle_find_orders.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers/handle_find_product.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/handle_find_product.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlers/handle_print_order.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers/handle_start_command.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/handle_start_command.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/db_models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/add_order.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/add_product.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/product/add_product.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/add_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/user/add_user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/change_price.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/product/update/change_price.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/change_quantity.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/product/update/change_quantity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/confirm_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/order/confirm_order.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/delete_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/order/delete_order.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/delete_orders.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/order/delete_orders.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/delete_product.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/product/delete_product.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/find_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/user/find_user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/get_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/order/get_order.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/get_orders.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/order/get_orders.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/get_products_by_category.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/get_variant.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/product/get_variant.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/get_variants.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/product/get_products.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/order_to_sale.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/schemas.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/order_service.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/serialize_products.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/serialize_products.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/api_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/api_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/db_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/db_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/category/add_category.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/category/add_category.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/order/add_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/order/add_order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/order/confirm_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/order/confirm_order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/order/get_orders.py" beforeDir="false" afterPath="$PROJECT_DIR$/requests/order/get_orders.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telegram_bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/telegram_bot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web.py" beforeDir="false" afterPath="$PROJECT_DIR$/web.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,19 +77,20 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.perfectHeart.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.project&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.appearance&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Python\Business\BackEnd\services" />
       <recent name="D:\Python\Business\BackEnd\requests\category\update" />
       <recent name="D:\Python\Business\BackEnd\requests\product\update" />
       <recent name="D:\Python\Business\BackEnd\requests\user" />
       <recent name="D:\Python\Business\BackEnd\requests\product" />
-      <recent name="D:\Python\Business\BackEnd\requests\order" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -202,8 +181,27 @@
       <option name="project" value="LOCAL" />
       <updated>1759482068577</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="ended back">
+      <option name="closed" value="true" />
+      <created>1762165371287</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1762165371287</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit" />
@@ -215,6 +213,7 @@
     <MESSAGE value="close to end requests and continue handlers" />
     <MESSAGE value="close to end handlers" />
     <MESSAGE value="close to end handlers and endpoints" />
-    <option name="LAST_COMMIT_MESSAGE" value="close to end handlers and endpoints" />
+    <MESSAGE value="ended back" />
+    <option name="LAST_COMMIT_MESSAGE" value="ended back" />
   </component>
 </project>

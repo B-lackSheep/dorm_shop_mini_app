@@ -1,6 +1,5 @@
 from aiogram import Bot, Dispatcher
 import os
-from fastapi import FastAPI
 
 
 bot = Bot(token=os.getenv("TOKEN"), parse_mode="HTML")
@@ -19,5 +18,3 @@ DEFAULT_VALUES = {
     "price": 0.0,
     "quantity": 0
 }
-
-app = FastAPI()

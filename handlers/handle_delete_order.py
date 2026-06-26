@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command
 
 from filters.is_admin import is_admin
-from models import async_session
+from models.db_models import async_session
 from requests.order.delete_order import delete_order
 from requests.order.get_order import get_order
 
@@ -34,13 +34,13 @@ async def process_delete_order(message: types.Message, state: FSMContext):
         try:
             order_id = int(message.text)
         except ValueError:
-            await message.answer("Некорректный числовой ID. Примените команду заново.")
+            await message.answer("Некорректный числовой ID. Примените команду заново")
             await state.clear()
             return
 
         order = await get_order(order_id, session)
         if not order:
-            await message.answer("Такого заказа не существует.")
+            await message.answer("Такого заказа не существует. Примените команду заново")
             await state.clear()
             return
 
@@ -78,6 +78,6 @@ async def confirm_delete_order(message: types.Message, state: FSMContext):
         result = await delete_order(order_id)
         await message.answer(f"{result['message']}")
     else:
-        await message.answer("Удаление отменено.")
+        await message.answer("Операция отменена")
 
     await state.clear()

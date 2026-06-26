@@ -26,6 +26,11 @@ class UserRequest(BaseModel):
     room: str
 
 
+class PlaceOrderRequest(OrderRequest):
+    items: list[OrderItemRequest]
+    user: UserRequest
+
+
 class CategoryResponse(BaseModel):
     id: int
     category_name: str

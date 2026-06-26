@@ -4,9 +4,10 @@ from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command
 
 from filters.is_admin import is_admin
-from models import async_session
+from models.db_models import async_session
 from requests.order.delete_orders import delete_orders
 from requests.order.get_orders import get_orders
+
 
 router = Router()
 
@@ -33,13 +34,13 @@ async def process_delete_orders(message: types.Message, state: FSMContext):
         try:
             user_id = int(message.text)
         except ValueError:
-            await message.answer("Некорректный числовой ID. Примените команду заново.")
+            await message.answer("Некорректный числовой ID. Примените команду заново")
             await state.clear()
             return
 
         orders = await get_orders(user_id, session)
         if not orders:
-            await message.answer("У этого пользователя нет заказов.")
+            await message.answer("У этого пользователя нет заказов. Примените команду заново")
             await state.clear()
             return
 
@@ -80,8 +81,8 @@ async def confirm_delete_orders(message: types.Message, state: FSMContext):
         user_id = data.get("user_id")
 
         result = await delete_orders(user_id)
-        await message.answer(f"{result['message']}")
+        await message.answer(f"{result['status']}: {result['message']}")
     else:
-        await message.answer("Удаление отменено.")
+        await message.answer("Операция отменена")
 
     await state.clear()

@@ -16,12 +16,14 @@ class AddProduct(StatesGroup):
     waiting_for_volume = State()
     waiting_for_price = State()
     waiting_for_quantity = State()
+    waiting_for_confirmation = State()
 
 
 @router.message(commands=["addProduct"])
 async def start_add_product(message: types.Message, state: FSMContext):
     if not is_admin(message):
         await message.answer("У вас нет прав для этой команды")
+        await state.clear()
         return
 
     await message.answer("Введите название категории:")
@@ -54,7 +56,8 @@ async def process_price(message: types.Message, state: FSMContext):
     try:
         price = float(message.text)
     except ValueError:
-        await message.answer("Введите число (например, 99.9)")
+        await message.answer("Некорректная цена. Примените команду заново")
+        await state.clear()
         return
 
     await state.update_data(price=price)
@@ -67,20 +70,34 @@ async def process_quantity(message: types.Message, state: FSMContext):
     try:
         quantity = int(message.text)
     except ValueError:
-        await message.answer("Введите целое число (например, 10)")
+        await message.answer("Некорректное количество. Примените команду заново")
+        await state.clear()
         return
 
-    async with async_session as session:
-        data = await state.get_data()
-        await add_product(data, session)
+    await state.update_data(quantity=quantity)
+    data = await state.get_data()
 
-        await message.answer(
-            f"Товар успешно добавлен:\n\n"
-            f"Категория: {data['category_name']}\n"
-            f"Название: {data['product_name']}\n"
-            f"Объём: {data['volume']}\n"
-            f"Цена: {data['price']}\n"
-            f"Количество: {quantity}"
-        )
+    await message.answer(
+        "Вы уверены, что хотите добавить продукт? \n"
+        f"Категория: {data['category_name']}\n"
+        f"Название: {data['product_name']}\n"
+        f"Объём: {data['volume']}\n"
+        f"Цена: {data['price']}\n"
+        f"Количество: {data['quantity']}\n"
+        f"Напишите 'Да' для подтверждения или 'Нет' для отмены"
+    )
 
-        await state.clear()
+    await state.set_state(AddProduct.waiting_for_confirmation)
+
+
+@router.message(AddProduct.waiting_for_confirmation)
+async def process_confirmation(message: types.Message, state: FSMContext):
+    if message.text.lower() == "да":
+        async with async_session() as session:
+            data = await state.get_data()
+            result = await add_product(data, session)
+            await message.answer(f"{result['status']}: {result['message']}")
+    else:
+        await message.answer("Операция отменена")
+
+    await state.clear()

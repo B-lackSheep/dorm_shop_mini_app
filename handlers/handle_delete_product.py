@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command
 
 from filters.is_admin import is_admin
-from models import async_session
+from models.db_models import async_session
 from requests.product.delete_product import delete_product
 from requests.product.get_variant import get_variant
 
@@ -34,13 +34,13 @@ async def process_delete_product(message: types.Message, state: FSMContext):
         try:
             variant_id = int(message.text)
         except ValueError:
-            await message.answer("Введите корректный числовой ID.")
+            await message.answer("Некорректный числовой ID. Примените команду заново")
             await state.clear()
             return
 
         variant = await get_variant(variant_id, session)
         if not variant:
-            await message.answer("Вариант не найден. Введите команду заново.")
+            await message.answer("Вариант не найден. Примените команду заново")
             await state.clear()
             return
 
@@ -53,7 +53,7 @@ async def process_delete_product(message: types.Message, state: FSMContext):
             f"Объём: {variant.volume}\n"
             f"Цена: {variant.price} BYN\n"
             f"Количество: {variant.quantity}\n\n"
-            "Напишите 'Да' для подтверждения или 'Нет' для отмены."
+            "Напишите 'Да' для подтверждения или 'Нет' для отмены"
         )
         await message.answer(text)
         await state.set_state(DeleteProduct.waiting_for_confirmation)
@@ -66,8 +66,8 @@ async def confirm_delete_product(message: types.Message, state: FSMContext):
         variant_id = data.get("variant_id")
 
         result = await delete_product(variant_id)
-        await message.answer(f"{result['message']}")
+        await message.answer(f"{result['status']}: {result['message']}")
     else:
-        await message.answer("Удаление отменено.")
+        await message.answer("Операция отменена")
 
     await state.clear()

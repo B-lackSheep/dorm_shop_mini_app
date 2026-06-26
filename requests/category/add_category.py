@@ -2,7 +2,7 @@ from models.db_models import Category
 from requests.category.get_category import get_category
 
 
-async def add_order(category_name, session):
+async def add_category(category_name, session):
     async with session.begin():
         category = await get_category(category_name, session)
         if category:

@@ -1,8 +1,10 @@
 from aiogram import Router, types
 from requests.user.add_user import add_user
+import logging
 
 
 router = Router()
+logger = logging.getLogger(__name__)
 
 
 @router.message(commands=["start"])
@@ -12,11 +14,15 @@ async def handle_start_command(message: types.Message):
     first_name = message.from_user.first_name
 
     result = await add_user(tg_id, username, first_name)
-    print(result)
+    logger.info(f"User added: {result}")
 
     text = (
         "Приветствую тебя в <b>Общажной лавке</b>!\n\n"
         "Тебя ожидает самый большой ассортимент и удобнейший сервис.\n\n"
-        "Скорее нажимай на кнопку <b>лавка</b>"
+        "Скорее нажимай на кнопку <b>Лавка</b>"
     )
+
+    keyboard = [
+        [InlineKeyboardButton("Открыть мини-приложение", web_app={"url": "https://your-mini-app-url.com"})]
+    ]
     await message.answer(text)

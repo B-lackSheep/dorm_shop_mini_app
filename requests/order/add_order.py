@@ -7,6 +7,7 @@ async def add_order(order_data, order_components, user_data, session):
     async with session.begin():
         order = Order(
             user_id=user_data.id,
+            order_id=order_data.order_id,
             total_cost=order_data.total_cost,
             created_at=datetime.now(pytz.timezone("Europe/Minsk")),
             notes=order_data.notes,
@@ -15,10 +16,11 @@ async def add_order(order_data, order_components, user_data, session):
             user_first_name=user_data.first_name
         )
         session.add(order)
+        await session.flush()
 
         for component in order_components:
             order_item = OrderItem(
-                order_id=component.order_id,
+                order_id=order.id,
                 category_name=component.category_name,
                 product_name=component.product_name,
                 volume=component.volume,

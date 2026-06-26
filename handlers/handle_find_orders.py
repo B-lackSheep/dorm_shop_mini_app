@@ -4,7 +4,7 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 from filters.is_admin import is_admin
 from requests.order.get_orders import get_orders
-from models import async_session
+from models.db_models import async_session
 
 
 router = Router()
@@ -31,13 +31,13 @@ async def process_user_id(message: types.Message, state: FSMContext):
         try:
             user_id = int(message.text)
         except ValueError:
-            await message.answer("Некорректный ID пользователя. Примените команду заново.")
+            await message.answer("Некорректный ID пользователя. Примените команду заново")
             await state.clear()
             return
 
         orders = await get_orders(user_id, session)
         if not orders:
-            await message.answer("У этого пользователя нет заказов.")
+            await message.answer("У этого пользователя нет заказов. Примените команду заново")
             await state.clear()
             return
 

@@ -1,13 +1,13 @@
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from models.db_models import Order, User
+from models.db_models import Order
 
 
 async def get_orders(tg_id, session):
     stmt = (
         select(Order)
         .options(selectinload(Order.items))
-        .where(User.tg_id == tg_id)
+        .where(Order.user_tg_id == tg_id)
     )
     result = await session.scalars(stmt)
     orders = result.all()

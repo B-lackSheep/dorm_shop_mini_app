@@ -1,4 +1,7 @@
+import enum
 import os
+
+import sqlalchemy
 from dotenv import load_dotenv
 from sqlalchemy import String, Text, BigInteger, ForeignKey, Integer, Numeric, DateTime
 from sqlalchemy.orm import Mapped, DeclarativeBase, mapped_column, relationship
@@ -75,11 +78,16 @@ class ProductVariant(Base):
     product: Mapped["Product"] = relationship(back_populates="variants")
 
 
+class Status(enum.Enum):
+    PENDING = "pending"
+    CONFIRMED = "confirmed"
+
+
 class Order(Base):
     __tablename__ = "orders"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    user_tg_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
 
     total_cost: Mapped[float] = mapped_column(Numeric(10, 2), default=DEFAULT_VALUES["total_cost"])
     created_at: Mapped[datetime] = mapped_column(
@@ -91,6 +99,7 @@ class Order(Base):
     username: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES["username"])
     user_room: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['room'])
     user_first_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['first_name'])
+    status: Mapped[str] = mapped_column(sqlalchemy.Enum(Status), nullable=False, default=Status.PENDING)
 
     items: Mapped[list["OrderItem"]] = relationship(back_populates="order", cascade="all, delete-orphan")
 
@@ -111,47 +120,6 @@ class OrderItem(Base):
     quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=DEFAULT_VALUES['quantity'])
 
     order: Mapped["Order"] = relationship(back_populates="items")
-
-
-class Sale(Base):
-    __tablename__ = "sales"
-
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
-
-    total_cost: Mapped[float] = mapped_column(
-        Numeric(10, 2),
-        nullable=False,
-        default=DEFAULT_VALUES['total_cost']
-    )
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        default=lambda: datetime.now(pytz.timezone('Europe/Minsk'))
-    )
-
-    username: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['username'])
-    user_room: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['room'])
-    user_first_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['first_name'])
-
-    items: Mapped[list["SaleItem"]] = relationship(back_populates="sale", cascade="all, delete-orphan")
-
-
-class SaleItem(Base):
-    __tablename__ = "sale_items"
-
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    sale_id: Mapped[int] = mapped_column(ForeignKey("sales.id", ondelete="CASCADE"))
-    category_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['category_name'])
-    product_name: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES["product_name"])
-    volume: Mapped[str] = mapped_column(Text, nullable=False, default=DEFAULT_VALUES['volume'])
-    price: Mapped[float] = mapped_column(
-        Numeric(10, 2),
-        nullable=False,
-        default=DEFAULT_VALUES['price']
-    )
-    quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=DEFAULT_VALUES['quantity'])
-
-    sale: Mapped["Sale"] = relationship("Sale", back_populates="items")
 
 
 async def init_db():

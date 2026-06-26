@@ -35,13 +35,13 @@ async def process_confirm_order(message: types.Message, state: FSMContext):
         try:
             order_id = int(message.text)
         except ValueError:
-            await message.answer("Некорректный числовой ID. Примените команду заново.")
+            await message.answer("Некорректный числовой ID. Примените команду заново")
             await state.clear()
             return
 
         order = await get_order(order_id, session)
         if not order:
-            await message.answer("Такого заказа не существует.")
+            await message.answer("Такого заказа не существует. Примените команду заново")
             await state.clear()
             return
 
@@ -75,8 +75,7 @@ async def confirm_confirm_order(message: types.Message, state: FSMContext):
         order_id = data.get("order_id")
 
         sending_result = await confirm_order(order_id)
-        deletion_result = await delete_order(order_id)
-        await message.answer(f"{sending_result['message']}, {deletion_result['message']}")
+        await message.answer(f"{sending_result['message']}")
     else:
         await message.answer("Подтверждение отменено.")
 

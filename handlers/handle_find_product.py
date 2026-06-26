@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command
 
 from filters.is_admin import is_admin
-from models import async_session
+from models.db_models import async_session
 from requests.product.get_products import get_products
 
 
@@ -33,7 +33,7 @@ async def handle_product_name(message: types.Message, state: FSMContext):
 
         product_variants = await get_products(product_name, session)
         if not product_variants:
-            await message.answer("Продукт с таким именем не найден.")
+            await message.answer("Продукт с таким именем не найден. Примените команду заново")
             await state.clear()
             return
 
